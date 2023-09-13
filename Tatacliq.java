@@ -34,29 +34,37 @@ import org.openqa.selenium.support.ui.Select;
 public class Tatacliq {
 	public static void main(String Args[]){
 	
-		ChromeDriver driver = new ChromeDriver();
+		ChromeOptions option = new ChromeOptions();
+		option.addArguments("--disable-notifications","start-maximized");
+		ChromeDriver driver = new ChromeDriver(option);
+		
 		driver.get("https://www.tatacliq.com/");
-	
-		driver.manage().window().maximize();
 		
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-		driver.findElement(By.xpath("//button[@id='wzrk-cancel']")).click();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
 		
-		driver.findElement(By.xpath("//div[text()='Brands']")).click();
+		Thread.sleep(3000);
+		WebElement brand = driver.findElement(By.xpath("(//div[@class='DesktopHeader__arrow'])[2]"));
+		Actions builder = new Actions(driver);
+			
+		builder.moveToElement(brand).perform();
 		
-		driver.findElement(By.xpath("//div[text()='Watches & Accessories']")).click();
+		WebElement watch = driver.findElement(By.xpath("//div[@class='DesktopHeader__brandLeftDetails']/div[5]"));
+		
+		builder.moveToElement(watch).perform();
 		
 		driver.findElement(By.xpath("//div[text()='Casio']")).click();
 		
-		WebElement sortby = driver.findElement(By.xpath("//select[@class='SelectBoxDesktop__hideSelect']"));
+		WebElement sort = driver.findElement(By.xpath("//select[@label='Popularity']"));
 		
-		Select Dropdowm=new Select(sortby);
+		Select sortdd = new Select(sort);
+		sortdd.selectByVisibleText("New Arrivals");
+		Thread.sleep(2000);
 		
-		Dropdowm.selectByVisibleText("New Arrivals");
+		driver.findElement(By.xpath("(//div[@class='CheckBox__base'])[1]")).click();
 		
-		driver.findElement(By.xpath("//div[@class='FilterDesktop__newFilName']")).click();
 		
-		driver.findElement(By.xpath("//div[@class='Accordion__filterAccHolder']")).click();
+		
+		driver.close();
 		
 	
 	}
